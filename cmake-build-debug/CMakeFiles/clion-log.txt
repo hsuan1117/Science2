@@ -1,0 +1,9 @@
+C:\Users\Yahui\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\203.6682.181\bin\cmake\win\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" D:\GithubProject\Science2
+CMake Error at cmake/ArduinoToolchain.cmake:82 (message):
+  Could not find Arduino SDK (set ARDUINO_SDK_PATH)!
+Call Stack (most recent call first):
+  C:/Users/Yahui/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/203.6682.181/bin/cmake/win/share/cmake-3.17/Modules/CMakeDetermineSystem.cmake:93 (include)
+  CMakeLists.txt:8 (project)
+
+
+-- Configuring incomplete, errors occurred!
