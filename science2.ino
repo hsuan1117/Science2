@@ -11,8 +11,7 @@
 
    值越小轉越快，太小會轉不動
  * */
-const int MOTOR_STEP   = 2048;
-
+const int MOTOR_STEP = 2048;
 
 
 /**
@@ -28,7 +27,7 @@ const int MOTOR_STEP   = 2048;
    @see <a href="https://www.arduino.cc/en/Reference/SoftwareSerialConstructor">說明文件</a>
  **/
 SoftwareSerial light(10, 9);
-Stepper motor(MOTOR_STEP,A0,A1,A2,A3);
+Stepper motor(MOTOR_STEP, A0, A1, A2, A3);
 /**
    存放取得的資料
  * */
@@ -78,7 +77,7 @@ public:
             }
         }
 
-        //delay(100);
+        delay(100);
         if (data[start + 2] == FRAME_DATATYPE_LIGHT) {
             Serial.println("[Info] DataType: Light");
             verify_data(8, start);
@@ -104,6 +103,7 @@ public:
 
 
 };
+
 GY39 Device;
 
 
@@ -133,19 +133,21 @@ void setup() {
         light.print(mode[i]);
     }
 }
-long long  start;
+String payload;
+long long start;
 bool started = false;
+
 void loop() {
-
     delay(500);
-    //while (Serial.available()) {
-    iipt = Serial.readStringUntil('@').toInt();
-    if (iipt != 0) {
+    if(Serial.find('!')){
+        payload = Serial.readStringUntil('!');
         Serial.print("[Debug] ");
-        Serial.println(iipt);
+        Serial.println(payload);
 
 
-        int method = Serial.readStringUntil('!').toInt();
+        int method = getValue(payload, ':', 0).toInt();
+        int step   = getValue(payload, ':', 1).toInt();
+        //while (Serial.available()) {
         switch (method) {
             case 0:
                 //開始
@@ -157,25 +159,13 @@ void loop() {
                 break;
 
             case 2:
-                int step = Serial.readStringUntil('!').toInt()
                 for (int i = 1; i <= step; i++) {
                     motor.step(1);
                 }
-
-
-
-
-
-
-
-
-
-
-
                 break;
         }
 
-        if(started) {
+        if (started) {
             Device.read_data();
             Serial.print("Time: ");
             Serial.println(millis() - start);
@@ -184,4 +174,19 @@ void loop() {
             Serial.println(Serial.print(Device.calculate()));
         }
     }
+}
+
+String getValue(String data, char separator, int index) {
+    int found = 0;
+    int strIndex[] = {0, -1};
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i + 1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
