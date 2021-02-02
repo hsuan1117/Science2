@@ -24,6 +24,8 @@ const int MOTOR_STEP = 2048;
  **/
 SoftwareSerial light(10, 9);
 Stepper motor(MOTOR_STEP, A0, A1, A2, A3);
+Stepper motor2(MOTOR_STEP, 2,3,4,5);
+
 /**
    存放取得的資料
  * */
@@ -117,6 +119,7 @@ void setup() {
   light.begin(9600);
 
   motor.setSpeed(5);
+    motor2.setSpeed(5);
   digitalWrite(11, HIGH);
   digitalWrite(8, LOW);
 
@@ -157,6 +160,7 @@ void loop() {
       case 2:
         for (int i = 1; i <= step; i++) {
           motor.step(1);
+          motor2.step(1);
         }
         break;
     }
